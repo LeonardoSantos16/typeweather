@@ -3,12 +3,14 @@ import dayjs from "dayjs";
 import { api } from "./api";
 import { getNextDays } from "../utils/getNextDays";
 import { weatherIcons } from "../utils/weatherIcons";
-
+import { NextDaysItemProps } from "../components/NextDaysItem";
 interface GetWeatherByCityProps {
   latitude: number;
   longitude: number;
 }
 
+type WeatherIconsKeysProps = 'Clouds' | 'Rain' | 'Clear' | 'Snow'; // a propriedade main pode ser um desses tipos
+// type: permite criar tipos
 export interface WeatherAPIResponseProps {
   list: {
     dt_txt: string;
@@ -25,7 +27,7 @@ export interface WeatherAPIResponseProps {
       speed: number;
     },
     weather: {
-      main: string;
+      main: WeatherIconsKeysProps; 
       description: string;
     }[];
   }[];
@@ -55,8 +57,8 @@ export async function getWeatherByCity({ latitude, longitude }: GetWeatherByCity
   }
 
   const days = getNextDays();
-  const daysAdded = [];
-  const nextDays = [];
+  const daysAdded: string[] = [];
+  const nextDays: NextDaysItemProps[] = [];
 
   data.list.forEach((item) => {
     const day = dayjs(new Date(item.dt_txt)).format('DD/MM');
